@@ -53,28 +53,31 @@ DataMapping.ImportFields.Bibliographic["Aeon"] = {
     },
     {
         Table = "Transaction",
-        Field ="ItemPublisher", MaxSize = 255,
-        Value = "//datafield[@tag='260']/subfield[@code='b']"
-    },
-    {
-        Table = "Transaction",
-        Field ="ItemPlace", MaxSize = 255,
-        Value = "//datafield[@tag='260']/subfield[@code='a']"
-    },
-    {
-        Table = "Transaction",
         Field ="ItemDate", MaxSize = 50,
-        Value = "//datafield[@tag='260']/subfield[@code='c']"
+        Value = "//datafield[@tag='260']|//datafield[@tag='264']"
     },
     {
         Table = "Transaction",
         Field ="ItemEdition", MaxSize = 50,
-        Value = "//datafield[@tag='250']/subfield[@code='a']"
+        Value = "//datafield[@tag='300']"
     },
     {
+-- notes and boundwith information - shirea 5/2021
         Table = "Transaction",
-        Field ="ItemIssue", MaxSize = 255,
-        Value = "//datafield[@tag='773']/subfield[@code='g']"
+        Field ="ItemSubTitle", MaxSize = 255,
+        Value = "//datafield[@tag='590']|//datafield[@tag='599']"
+    },
+    {
+-- Volume/box - shirea 5/2021
+        Table = "Transaction",
+        Field ="ItemVolume", MaxSize = 255,
+        Value = "//datafield[@tag='598']/subfield[@code='p']|//datafield[@tag='598']/subfield[@code='b']"
+    },
+    {
+-- Series - shirea 5/2021
+        Table = "Transaction",
+        Field ="ItemInfo2", MaxSize = 255, 
+        Value = "//datafield[@tag='830']"
     }
 };
 
@@ -102,7 +105,7 @@ DataMapping.ImportFields.Item["Aeon"] = {
     },
     {
         Table = "Transaction",
-        Field = "SubLocation", MaxSize = 255,
-        Value = "Library"
+        Field = "ItemInfo1", MaxSize = 255,
+        Value = "Description"
     }
 };

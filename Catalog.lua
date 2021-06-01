@@ -227,7 +227,8 @@ function PerformSearch(autoSearch, searchType)
     local searchUrl = "";
 
     --Construct the search url based on the base catalog url, the search prefix that is defined in DataMapping for each MapType, followed by the search term
-    searchUrl = settings.CatalogUrl .. "search?vid=" .. settings.PrimoSiteCode .. "&query=" .. DataMapping.SearchTypes[searchType] .. ",contains," .. Utility.URLEncode(searchTerm) .. ",AND&search_scope=default_scope&mode=advanced";
+    -- shirea 5/19/2021: use the library catalog only search scope
+    searchUrl = settings.CatalogUrl .. "search?vid=" .. settings.PrimoSiteCode .. "&query=" .. DataMapping.SearchTypes[searchType] .. ",contains," .. Utility.URLEncode(searchTerm) .. ",AND&search_scope=catalog&mode=advanced";
 
     log:DebugFormat("Navigating to {0}", searchUrl);
     catalogSearchForm.Browser:Navigate(searchUrl);

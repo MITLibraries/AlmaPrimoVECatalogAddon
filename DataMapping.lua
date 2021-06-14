@@ -54,7 +54,7 @@ DataMapping.ImportFields.Bibliographic["Aeon"] = {
     {
         Table = "Transaction",
         Field ="ItemDate", MaxSize = 50,
-        Value = "//datafield[@tag='260']|//datafield[@tag='264']"
+        Value = "//datafield[@tag='260']/subfield[@code='c']|//datafield[@tag='264']/subfield[@code='c']"
     },
     {
         Table = "Transaction",

@@ -217,12 +217,13 @@ local function GetChildValue(xmlElement, xPath, namespaceManager)
 end
 
 local function RemoveTrailingSpecialCharacters(item)
-    local trailingCharacters = { '\\', '/', ',', '.', ';', ':', '-', '=' };
+    local trailingCharacters = { '\\', '/', ',', '%.', ';', ':', '%-', '=' };
     for _, value in ipairs(trailingCharacters) do
         if (string.match(item, value, -1)) then
             return Utility.Trim(item:sub(1, -2))
         end
     end
+    return item;
 end
 
 local function RemoveWhiteSpaceFromString(str)

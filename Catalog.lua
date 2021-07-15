@@ -626,6 +626,9 @@ function DoItemImport()
         log:DebugFormat("Importing {0}, {1}, {2}", target.Field, target.Value, target.MaxSize);
         ImportField(target.Table, target.Field, target.Value, target.MaxSize);
     end
+    
+    -- add permalink ams 7/2021
+    AddPermaLink();
 
     cursor.Current = cursors.Default;
     log:Debug("Switching to the detail tab.");
@@ -699,4 +702,12 @@ end
 function AddBibliographicInformation(bibliographicInformation, targetTable, targetField, fieldValue, targetMaxSize)
     local bibInfoEntry = {Table = targetTable, Field = targetField, Value = fieldValue, MaxSize = targetMaxSize}
     table.insert( bibliographicInformation, bibInfoEntry );
+end
+
+
+function AddPermaLink()
+    -- populate ItemInfo5 (resource URL) field with a permalink to primo record.
+    -- We can use the address of the primo page currently displayed in the
+    -- addon when the import button is clicked. 
+    SetFieldValue('Transaction', 'ItemInfo5', catalogSearchForm.Browser.WebBrowser.Address);
 end

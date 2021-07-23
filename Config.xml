@@ -2,7 +2,7 @@
 <Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Name>Alma Primo VE Catalog Search</Name>
   <Author>Atlas Systems</Author>
-  <Version>1.0.1</Version>
+  <Version>1.0.2</Version>
   <Active>True</Active>
   <Type>Addon</Type>
   <Description>Catalog Search and Import Addon that uses Alma as the catalog and PrimoVE as the discovery layer</Description>
@@ -43,7 +43,6 @@
   </Settings>
   <Files>
     <File>Utility.lua</File>
-    <File>RegEx.lua</File>
     <File>DataMapping.lua</File>
     <File>CustomizedMapping.lua</File>
     <File>Catalog.lua</File>

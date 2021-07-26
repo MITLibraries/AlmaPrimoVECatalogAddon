@@ -9,7 +9,6 @@ settings.RemoveTrailingSpecialCharacters = GetSetting("RemoveTrailingSpecialChar
 settings.AlmaApiUrl = GetSetting("AlmaAPIURL");
 settings.AlmaApiKey = GetSetting("AlmaAPIKey");
 settings.PrimoSiteCode = GetSetting("PrimoSiteCode");
-settings.MmsIdRegex = GetSetting("MmsIdRegex");
 
 local interfaceMngr = nil;
 
@@ -270,7 +269,7 @@ end
 function IsRecordPageLoaded()
     log:Debug("[IsRecordPageLoaded]");
     local pageUrl = catalogSearchForm.Browser.WebBrowser.Address;
-    local isRecordPage = RegEx.Match("fulldisplay\?", pageUrl).Length > 0;
+    local isRecordPage = pageUrl:find("fulldisplay%?");
 
     if isRecordPage then
         log:DebugFormat("Is a record page. {0}", pageUrl);
@@ -523,7 +522,7 @@ function GetHoldingIds(holdingsXmlDoc)
 
     for i = 0, holdingNodes.Count - 1 do
         local holdingNode = holdingNodes:Item(i);
-        table.insert(holdingIds, holdingNode["holding_id"].innerXML);
+        table.insert(holdingIds, holdingNode["holding_id"].InnerXml);
     end
 
     return holdingIds;

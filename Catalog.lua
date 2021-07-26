@@ -522,7 +522,7 @@ function GetHoldingIds(holdingsXmlDoc)
 
     for i = 0, holdingNodes.Count - 1 do
         local holdingNode = holdingNodes:Item(i);
-        table.insert(holdingIds, holdingNode["holding_id"].innerXML);
+        table.insert(holdingIds, holdingNode["holding_id"].InnerXml);
     end
 
     return holdingIds;

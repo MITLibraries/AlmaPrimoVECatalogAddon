@@ -202,7 +202,6 @@ function PerformSearch(autoSearch, searchType)
         log:DebugFormat("Auto-Search Type = {0}", searchType);
         if not searchType then
             log:Debug("The search type could not be determined using the current request information.");
-            local searchTypeError = "The search type could not be determined using the current request information.";
             return;
         end
         StartRecordPageWatcher();

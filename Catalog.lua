@@ -200,17 +200,9 @@ function PerformSearch(autoSearch, searchType)
     if (searchType == nil) then
         searchType = GetAutoSearchType();
         log:DebugFormat("Auto-Search Type = {0}", searchType);
-        if searchType == nil then
+        if not searchType then
+            log:Debug("The search type could not be determined using the current request information.");
             local searchTypeError = "The search type could not be determined using the current request information.";
-
-            if (autoSearch) then
-                catalogSearchForm.Browser.WebBrowser.DocumentText = searchTypeError;
-                log:Error(searchTypeError);
-            else
-                -- Should only be reachable if a search button didn't include a search type
-                interfaceMngr:ShowMessage(searchTypeError, "No Search Type Specified");
-            end
-
             return;
         end
         StartRecordPageWatcher();
@@ -269,23 +261,22 @@ end
 function IsRecordPageLoaded()
     log:Debug("[IsRecordPageLoaded]");
     local pageUrl = catalogSearchForm.Browser.WebBrowser.Address;
-    local isRecordPage = pageUrl:find("fulldisplay%?");
 
-    if isRecordPage then
+    if pageUrl:find("fulldisplay%?") then
         log:DebugFormat("Is a record page. {0}", pageUrl);
         local mms_id = GetMmsId(pageUrl);
         if mms_id == nil then
             log:Debug("Linked Data not loaded.");
             StartRecordPageWatcher();
             ToggleItemsUIElements(false);
-            return false
+            return false;
         end
+        return true;
     else
         log:DebugFormat("Is not a record page. {0}", pageUrl);
         ToggleItemsUIElements(false);
+        return false;
     end
-
-    return isRecordPage;
 end
 
 function RecordPageHandler()

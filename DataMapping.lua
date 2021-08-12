@@ -62,10 +62,10 @@ DataMapping.ImportFields.Bibliographic["Aeon"] = {
         Value = "//datafield[@tag='300']"
     },
     {
--- notes and boundwith information - shirea 5/2021
+-- notes and boundwith information 
         Table = "Transaction",
         Field ="ItemSubTitle", MaxSize = 255,
-        Value = "//datafield[@tag='590']|//datafield[@tag='599']"
+        Value = "//datafield[@tag='990']|//datafield[@tag='992']|//datafield[@tag='993']"
     },
     {
 -- Volume/box - shirea 5/2021

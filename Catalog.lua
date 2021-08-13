@@ -9,7 +9,6 @@ settings.RemoveTrailingSpecialCharacters = GetSetting("RemoveTrailingSpecialChar
 settings.AlmaApiUrl = GetSetting("AlmaAPIURL");
 settings.AlmaApiKey = GetSetting("AlmaAPIKey");
 settings.PrimoSiteCode = GetSetting("PrimoSiteCode");
-settings.MmsIdRegex = GetSetting("MmsIdRegex");
 
 local interfaceMngr = nil;
 
@@ -201,17 +200,8 @@ function PerformSearch(autoSearch, searchType)
     if (searchType == nil) then
         searchType = GetAutoSearchType();
         log:DebugFormat("Auto-Search Type = {0}", searchType);
-        if searchType == nil then
-            local searchTypeError = "The search type could not be determined using the current request information.";
-
-            if (autoSearch) then
-                catalogSearchForm.Browser.WebBrowser.DocumentText = searchTypeError;
-                log:Error(searchTypeError);
-            else
-                -- Should only be reachable if a search button didn't include a search type
-                interfaceMngr:ShowMessage(searchTypeError, "No Search Type Specified");
-            end
-
+        if not searchType then
+            log:Debug("The search type could not be determined using the current request information.");
             return;
         end
         StartRecordPageWatcher();
@@ -271,23 +261,22 @@ end
 function IsRecordPageLoaded()
     log:Debug("[IsRecordPageLoaded]");
     local pageUrl = catalogSearchForm.Browser.WebBrowser.Address;
-    local isRecordPage = RegEx.Match("fulldisplay\?", pageUrl).Length > 0;
 
-    if isRecordPage then
+    if pageUrl:find("fulldisplay%?") then
         log:DebugFormat("Is a record page. {0}", pageUrl);
         local mms_id = GetMmsId(pageUrl);
         if mms_id == nil then
             log:Debug("Linked Data not loaded.");
             StartRecordPageWatcher();
             ToggleItemsUIElements(false);
-            return false
+            return false;
         end
+        return true;
     else
         log:DebugFormat("Is not a record page. {0}", pageUrl);
         ToggleItemsUIElements(false);
+        return false;
     end
-
-    return isRecordPage;
 end
 
 function RecordPageHandler()
@@ -524,7 +513,7 @@ function GetHoldingIds(holdingsXmlDoc)
 
     for i = 0, holdingNodes.Count - 1 do
         local holdingNode = holdingNodes:Item(i);
-        table.insert(holdingIds, holdingNode["holding_id"].innerXML);
+        table.insert(holdingIds, holdingNode["holding_id"].InnerXml);
     end
 
     return holdingIds;

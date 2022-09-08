@@ -71,12 +71,12 @@ DataMapping.ImportFields.Bibliographic["Aeon"] = {
 -- Volume/box - shirea 5/2021
         Table = "Transaction",
         Field ="ItemVolume", MaxSize = 255,
-        Value = "//datafield[@tag='598']/subfield[@code='p']|//datafield[@tag='598']/subfield[@code='b']"
+        Value = "//datafield[@tag='988']/subfield[@code='p']|//datafield[@tag='988']/subfield[@code='b']"
     },
     {
 -- Series - shirea 5/2021
-        Table = "Transaction",
-        Field ="ItemInfo2", MaxSize = 255, 
+        Table = "Transaction.CustomFields",
+        Field ="SeriesNumber", MaxSize = 255,
         Value = "//datafield[@tag='830']"
     }
 };
@@ -104,8 +104,8 @@ DataMapping.ImportFields.Item["Aeon"] = {
         Value = "Location"
     },
     {
-        Table = "Transaction",
-        Field = "ItemInfo1", MaxSize = 255,
+        Table = "Transaction.CustomFields",
+        Field = "Issue", MaxSize = 255,
         Value = "Description"
     }
 };

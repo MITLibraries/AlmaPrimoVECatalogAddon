@@ -695,8 +695,9 @@ end
 
 
 function AddPermaLink()
-    -- populate ItemInfo5 (resource URL) field with a permalink to primo record.
+    -- populate RecordURL field with a permalink to primo record.
     -- We can use the address of the primo page currently displayed in the
     -- addon when the import button is clicked. 
-    SetFieldValue('Transaction', 'ItemInfo5', catalogSearchForm.Browser.WebBrowser.Address);
+    log:Debug("adding Permalink");
+    SetFieldValue('Transaction.CustomFields', 'RecordURL', catalogSearchForm.Browser.WebBrowser.Address);
 end

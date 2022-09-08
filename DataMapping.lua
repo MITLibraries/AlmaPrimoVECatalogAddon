@@ -83,7 +83,7 @@ DataMapping.ImportFields.Bibliographic["Aeon"] = {
     {
         Table = "Transaction.CustomFields",
         Field = "OCLCNum", MaxSize = 255,
-        Value = "//datafield[@tag='035']"
+        Value = "//datafield[@tag='035'][subfield[text()[contains(.,'(OCoLC)')]]][1]"
     },
 -- DSpace URL
     {

@@ -645,40 +645,30 @@ function GetBibliographicInformation()
             -- Loops through each Bibliographic mapping
             for _, target in ipairs(DataMapping.ImportFields.Bibliographic[product]) do
                 if (target and target.Field and target.Field ~= "") then
-                    log:DebugFormat("Value: {0}", target.Value);
+                    log:DebugFormat("xPath =: {0}", target.Value);
                     log:DebugFormat("Target: {0}", target.Field);
-                    local marcSets = Utility.StringSplit(',', target.Value );
-                    log:DebugFormat("marcSets.Count = {0}", #marcSets);
+                    local datafieldNode = recordNode:SelectNodes(target.Value);
+                    log:DebugFormat("DataField Node Match Count: {0}", datafieldNode.Count);
 
-                    -- Loops through the MARC sets array
-                    for _, xPath in ipairs(marcSets) do
-                        log:DebugFormat("xPath = {0}", xPath);
-                        local datafieldNode = recordNode:SelectNodes(xPath);
-                        log:DebugFormat("DataField Node Match Count: {0}", datafieldNode.Count);
+                    if (datafieldNode.Count > 0) then
+                        local fieldValue = "";
 
-                        if (datafieldNode.Count > 0) then
-                            local fieldValue = "";
-
-                            -- Loops through each data field node retured from xPath and concatenates them (generally only 1)
-                            for datafieldNodeIndex = 0, (datafieldNode.Count - 1) do
-                                log:DebugFormat("datafieldnode value is: {0}", datafieldNode:Item(datafieldNodeIndex).InnerText);
-                                fieldValue = fieldValue .. " " .. datafieldNode:Item(datafieldNodeIndex).InnerText;
-                            end
-
-                            log:DebugFormat("target.Field: {0}", target.Field);
-                            log:DebugFormat("target.MaxSize: {0}", target.MaxSize);
-
-                            if(settings.RemoveTrailingSpecialCharacters) then
-                                fieldValue = Utility.RemoveTrailingSpecialCharacters(fieldValue);
-                            else
-                                fieldValue = Utility.Trim(fieldValue);
-                            end
-
-                            AddBibliographicInformation(bibliographicInformation, target.Table, target.Field, fieldValue, target.MaxSize);
-
-                            -- Need to break from MARC Set loop so the first record isn't overwritten
-                            break;
+                        -- Loops through each data field node retured from xPath and concatenates them (generally only 1)
+                        for datafieldNodeIndex = 0, (datafieldNode.Count - 1) do
+                            log:DebugFormat("datafieldnode value is: {0}", datafieldNode:Item(datafieldNodeIndex).InnerText);
+                            fieldValue = fieldValue .. " " .. datafieldNode:Item(datafieldNodeIndex).InnerText;
                         end
+
+                        log:DebugFormat("target.Field: {0}", target.Field);
+                        log:DebugFormat("target.MaxSize: {0}", target.MaxSize);
+
+                        if(settings.RemoveTrailingSpecialCharacters) then
+                            fieldValue = Utility.RemoveTrailingSpecialCharacters(fieldValue);
+                        else
+                            fieldValue = Utility.Trim(fieldValue);
+                        end
+
+                        AddBibliographicInformation(bibliographicInformation, target.Table, target.Field, fieldValue, target.MaxSize);
                     end
                 end
             end

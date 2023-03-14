@@ -10,10 +10,10 @@
     <Form>FormRequest</Form>
   </Forms>
   <Settings>
-    <Setting name="CatalogURL" value="" type="string">
+    <Setting name="CatalogURL" value="https://mit.primo.exlibrisgroup.com/discovery/" type="string">
       <Description>The base URL that the query strings are appended to.</Description>
     </Setting>
-    <Setting name="HomeURL" value="" type="string">
+    <Setting name="HomeURL" value="https://mit.primo.exlibrisgroup.com/discovery/search?vid=01MIT_INST:MIT&amp;lang=en" type="string">
       <Description>Home page of the catalog.</Description>
     </Setting>
     <Setting name="AutoSearch" value="true" type="boolean">

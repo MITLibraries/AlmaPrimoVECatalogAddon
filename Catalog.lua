@@ -702,9 +702,8 @@ end
 
 function AddPermaLink()
     -- populate RecordURL field with a permalink to primo record.
-    -- We can use the address of the primo page currently displayed in the
-    -- addon when the import button is clicked. 
     log:Debug("adding Permalink");
-    SetFieldValue('Transaction.CustomFields', 'RecordURL', catalogSearchForm.Browser.WebBrowser.Address);
+    local permalink = settings.HomeUrl ..
+        '&query=any,contains,' .. GetMmsId(catalogSearchForm.Browser.WebBrowser.Address)
     SetFieldValue('Transaction.CustomFields', 'RecordURL', permalink);
 end

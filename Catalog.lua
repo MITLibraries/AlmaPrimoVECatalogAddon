@@ -70,28 +70,36 @@ function Init()
     log:DebugFormat("catalogSearchForm.Form = {0}", catalogSearchForm.Form);
 
     -- Add a browser
-    catalogSearchForm.Browser = catalogSearchForm.Form:CreateBrowser(DataMapping.LabelName, "Catalog Search Browser", DataMapping.LabelName, "Chromium");
+    catalogSearchForm.Browser = catalogSearchForm.Form:CreateBrowser(DataMapping.LabelName, "Catalog Search Browser",
+        DataMapping.LabelName, "Chromium");
     log:DebugFormat("catalogSearchForm.Browser = {0}", catalogSearchForm.Browser);
 
     -- Since we didn't create a ribbon explicitly before creating our browser, it will have created one using the name we passed the CreateBrowser method.  We can retrieve that one and add our buttons to it.
     catalogSearchForm.RibbonPage = catalogSearchForm.Form:GetRibbonPage(DataMapping.LabelName);
 
     -- Create the search button(s)
-    catalogSearchForm.SearchButtons["Home"] = catalogSearchForm.RibbonPage:CreateButton("New Search", GetClientImage(DataMapping.Icons[product]["Web"]), "ShowCatalogHome", "Search Options");
+    catalogSearchForm.SearchButtons["Home"] = catalogSearchForm.RibbonPage:CreateButton("New Search",
+        GetClientImage(DataMapping.Icons[product]["Web"]), "ShowCatalogHome", "Search Options");
 
     for _, searchType in ipairs(settings.AvailableSearchTypes) do
         local variableName = Utility.RemoveWhiteSpaceFromString(searchType);
         log:DebugFormat("Variable Name = {0}", variableName);
-        catalogSearchForm.SearchButtons[variableName] = catalogSearchForm.RibbonPage:CreateButton(searchType, GetClientImage(DataMapping.Icons[product]["Search"]), "Search" .. variableName, "Search Options");
+        catalogSearchForm.SearchButtons[variableName] = catalogSearchForm.RibbonPage:CreateButton(searchType,
+            GetClientImage(DataMapping.Icons[product]["Search"]), "Search" .. variableName, "Search Options");
     end
 
     if (not settings.AutoRetrieveItems) then
-        catalogSearchForm.ItemsButton = catalogSearchForm.RibbonPage:CreateButton("Retrieve Items", GetClientImage(DataMapping.Icons[product]["Record"]), "RetrieveItems", "Process");
-        catalogSearchForm.ItemsButton.BarButton.ItemShortcut = types["DevExpress.XtraBars.BarShortcut"](types["System.Windows.Forms.Shortcut"].CtrlR);
-    end;
+        catalogSearchForm.ItemsButton = catalogSearchForm.RibbonPage:CreateButton("Retrieve Items",
+            GetClientImage(DataMapping.Icons[product]["Record"]), "RetrieveItems", "Process");
+        catalogSearchForm.ItemsButton.BarButton.ItemShortcut = types["DevExpress.XtraBars.BarShortcut"](types
+            ["System.Windows.Forms.Shortcut"].CtrlR);
+    end
+    ;
 
-    catalogSearchForm.ImportButton = catalogSearchForm.RibbonPage:CreateButton("Import", GetClientImage(DataMapping.Icons[product]["Import"]), "DoItemImport", "Process");
-    catalogSearchForm.ImportButton.BarButton.ItemShortcut = types["DevExpress.XtraBars.BarShortcut"](types["System.Windows.Forms.Shortcut"].CtrlI);
+    catalogSearchForm.ImportButton = catalogSearchForm.RibbonPage:CreateButton("Import",
+        GetClientImage(DataMapping.Icons[product]["Import"]), "DoItemImport", "Process");
+    catalogSearchForm.ImportButton.BarButton.ItemShortcut = types["DevExpress.XtraBars.BarShortcut"](types
+        ["System.Windows.Forms.Shortcut"].CtrlI);
     catalogSearchForm.ImportButton.BarButton.Enabled = false;
 
     BuildItemsGrid();
@@ -132,7 +140,7 @@ function StartRecordPageWatcher()
     log:Debug("[StartRecordPageWatcher]")
     watcherEnabled = true;
 
-    local checkIntervalMilliseconds = 3000; -- 3 seconds
+    local checkIntervalMilliseconds = 3000;  -- 3 seconds
     local maxWatchTimeMilliseconds = 300000; -- 5 minutes
     catalogSearchForm.Browser:StartPageWatcher(checkIntervalMilliseconds, maxWatchTimeMilliseconds);
 end
@@ -181,7 +189,6 @@ function GetAutoSearchType()
 
     for _, searchType in ipairs(priorityList) do
         if DataMapping.SearchTypes[searchType] and DataMapping.SourceFields[product][searchType] ~= nil then
-            
             local fieldDefinition = DataMapping.SourceFields[product][searchType]
             local fieldValue = GetFieldValue(fieldDefinition.Table, fieldDefinition.Field)
 
@@ -218,18 +225,23 @@ function PerformSearch(autoSearch, searchType)
 
     --Construct the search url based on the base catalog url, the search prefix that is defined in DataMapping for each MapType, followed by the search term
     -- shirea 5/19/2021: use the library catalog only search scope
-    searchUrl = settings.CatalogUrl .. "search?vid=" .. settings.PrimoSiteCode .. "&query=" .. DataMapping.SearchTypes[searchType] .. ",contains," .. Utility.URLEncode(searchTerm) .. ",AND&search_scope=catalog&mode=advanced";
+    searchUrl = settings.CatalogUrl ..
+        "search?vid=" ..
+        settings.PrimoSiteCode ..
+        "&query=" ..
+        DataMapping.SearchTypes[searchType] ..
+        ",contains," .. Utility.URLEncode(searchTerm) .. ",AND&search_scope=catalog&mode=advanced";
 
     log:DebugFormat("Navigating to {0}", searchUrl);
     catalogSearchForm.Browser:Navigate(searchUrl);
-  
 end
 
 function GetMmsId(webPage)
     log:Debug("[GetMmsId]")
 
     local checkLinkedData = [[ document.querySelector('script[type="application/ld+json"]').innerText; ]];
-    local GetMmsIdFromLinkedData = [[ JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText)["identifier"]["propertyID"]=="local" 
+    local GetMmsIdFromLinkedData =
+    [[ JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText)["identifier"]["propertyID"]=="local"
                                     ? JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText)["identifier"]["value"] : null ]];
 
     local ldJsonResult = catalogSearchForm.Browser:EvaluateScript(checkLinkedData);
@@ -251,11 +263,10 @@ function GetMmsId(webPage)
 
 
     local mmsId = string.sub(localIdentiferResult.Result, 5)
-    log:DebugFormat("MMS ID: {0}",mmsId);
+    log:DebugFormat("MMS ID: {0}", mmsId);
 
     StopRecordPageWatcher();
     return mmsId;
-
 end
 
 function IsRecordPageLoaded()
@@ -323,7 +334,7 @@ function ToggleItemsUIElements(enabled)
             catalogSearchForm.ItemsButton.BarButton.Enabled = true;
             recordsLastRetrievedFrom = "";
             -- If there's an item in the Item Grid
-            if(catalogSearchForm.Grid.GridControl.MainView.FocusedRowHandle > -1) then
+            if (catalogSearchForm.Grid.GridControl.MainView.FocusedRowHandle > -1) then
                 catalogSearchForm.Grid.GridControl.Enabled = true;
                 catalogSearchForm.ImportButton.BarButton.Enabled = true;
             end
@@ -432,7 +443,8 @@ function ItemsGridFocusedRowChanged(sender, args)
         catalogSearchForm.Grid.GridControl.Enabled = true;
     else
         catalogSearchForm.ImportButton.BarButton.Enabled = false;
-    end;
+    end
+    ;
 end
 
 function RetrieveItems()
@@ -473,11 +485,12 @@ function RetrieveItems()
 
                 local itemsResponse = itemsXmlDocCache[holdingId];
 
-                PopulateItemsDataSources( itemsResponse, itemsDataTable );
+                PopulateItemsDataSources(itemsResponse, itemsDataTable);
             end
         else
             ClearItems();
-        end;
+        end
+        ;
 
         cursor.Current = cursors.Default;
         return hasHoldings;
@@ -520,8 +533,8 @@ function GetHoldingIds(holdingsXmlDoc)
 end
 
 function setItemNodeFromCustomizedMapping(itemRow, itemNode, aeonField, mappings)
-    if(itemNode) then
-        if(mappings[itemNode.InnerXml] and mappings[itemNode.InnerXml] ~= "") then
+    if (itemNode) then
+        if (mappings[itemNode.InnerXml] and mappings[itemNode.InnerXml] ~= "") then
             itemRow = setItemNode(itemRow, mappings[itemNode.InnerXml], aeonField);
         else
             log:DebugFormat("Mapping NOT found for {0}. Setting row to innerXML.", aeonField, itemNode.InnerXml);
@@ -535,7 +548,7 @@ function setItemNodeFromCustomizedMapping(itemRow, itemNode, aeonField, mappings
 end
 
 function setItemNodeFromXML(itemRow, itemNode, aeonField)
-    if(itemNode) then
+    if (itemNode) then
         return setItemNode(itemRow, itemNode.InnerXml, aeonField);
     else
         log:DebugFormat("Cannot set {0}. Item Node is Nil", aeonField);
@@ -558,7 +571,7 @@ function setItemNode(itemRow, data, aeonField)
     return itemRow;
 end
 
-function PopulateItemsDataSources( response, itemsDataTable )
+function PopulateItemsDataSources(response, itemsDataTable)
     catalogSearchForm.Grid.GridControl:BeginUpdate();
 
     local itemNodes = response:GetElementsByTagName("item");
@@ -576,7 +589,8 @@ function PopulateItemsDataSources( response, itemsDataTable )
         itemRow = setItemNodeFromXML(itemRow, bibData["mms_id"], "ReferenceNumber");
         itemRow = setItemNodeFromXML(itemRow, holdingData["holding_id"], "HoldingId");
         itemRow = setItemNodeFromXML(itemRow, holdingData["call_number"], "CallNumber");
-        itemRow = setItemNodeFromCustomizedMapping(itemRow, itemData["location"], "Location", CustomizedMapping.Locations);
+        itemRow = setItemNodeFromCustomizedMapping(itemRow, itemData["location"], "Location", CustomizedMapping
+            .Locations);
         itemRow = setItemNodeFromXML(itemRow, itemData["library"], "Library");
         itemRow = setItemNodeFromXML(itemRow, itemData["barcode"], "Barcode");
         itemRow = setItemNodeFromXML(itemRow, itemData["description"], "Description");
@@ -599,7 +613,8 @@ function DoItemImport()
     if (importRow == nil) then
         log:Debug("Import row was nil.  Cancelling the import.");
         return;
-    end;
+    end
+    ;
 
     -- Update the transaction object with values.
     log:Debug("Updating the transaction object.");
@@ -615,7 +630,7 @@ function DoItemImport()
         log:DebugFormat("Importing {0}, {1}, {2}", target.Field, target.Value, target.MaxSize);
         ImportField(target.Table, target.Field, target.Value, target.MaxSize);
     end
-    
+
     -- add permalink ams 7/2021
     AddPermaLink();
 
@@ -655,20 +670,22 @@ function GetBibliographicInformation()
 
                         -- Loops through each data field node retured from xPath and concatenates them (generally only 1)
                         for datafieldNodeIndex = 0, (datafieldNode.Count - 1) do
-                            log:DebugFormat("datafieldnode value is: {0}", datafieldNode:Item(datafieldNodeIndex).InnerText);
+                            log:DebugFormat("datafieldnode value is: {0}",
+                                datafieldNode:Item(datafieldNodeIndex).InnerText);
                             fieldValue = fieldValue .. " " .. datafieldNode:Item(datafieldNodeIndex).InnerText;
                         end
 
                         log:DebugFormat("target.Field: {0}", target.Field);
                         log:DebugFormat("target.MaxSize: {0}", target.MaxSize);
 
-                        if(settings.RemoveTrailingSpecialCharacters) then
+                        if (settings.RemoveTrailingSpecialCharacters) then
                             fieldValue = Utility.RemoveTrailingSpecialCharacters(fieldValue);
                         else
                             fieldValue = Utility.Trim(fieldValue);
                         end
 
-                        AddBibliographicInformation(bibliographicInformation, target.Table, target.Field, fieldValue, target.MaxSize);
+                        AddBibliographicInformation(bibliographicInformation, target.Table, target.Field, fieldValue,
+                            target.MaxSize);
                     end
                 end
             end
@@ -679,15 +696,14 @@ function GetBibliographicInformation()
 end
 
 function AddBibliographicInformation(bibliographicInformation, targetTable, targetField, fieldValue, targetMaxSize)
-    local bibInfoEntry = {Table = targetTable, Field = targetField, Value = fieldValue, MaxSize = targetMaxSize}
-    table.insert( bibliographicInformation, bibInfoEntry );
+    local bibInfoEntry = { Table = targetTable, Field = targetField, Value = fieldValue, MaxSize = targetMaxSize }
+    table.insert(bibliographicInformation, bibInfoEntry);
 end
-
 
 function AddPermaLink()
     -- populate RecordURL field with a permalink to primo record.
-    -- We can use the address of the primo page currently displayed in the
-    -- addon when the import button is clicked. 
     log:Debug("adding Permalink");
-    SetFieldValue('Transaction.CustomFields', 'RecordURL', catalogSearchForm.Browser.WebBrowser.Address);
+    local permalink = settings.HomeUrl ..
+        '&query=any,contains,' .. GetMmsId(catalogSearchForm.Browser.WebBrowser.Address)
+    SetFieldValue('Transaction.CustomFields', 'RecordURL', permalink);
 end
